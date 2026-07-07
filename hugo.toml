@@ -1,0 +1,31 @@
+baseURL = "https://go-net-dhcp.github.io/"
+title = "go-net-dhcp"
+disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[[params.phases]]
+  name = "Wire codec"
+  status = "ready"
+  blurb = "RFC 2131 / 2132 parse + build — `Parse` decodes a DISCOVER/REQUEST (BOOTP header + magic cookie + TLV options), `BuildReply` emits an OFFER / ACK / NAK. Strict on framing, tolerant of unknown option codes, hand-rolled so the core has **zero third-party dependencies**."
+[[params.phases]]
+  name = "Decision core"
+  status = "ready"
+  blurb = "`Decide(pkt, opts)` runs the stateless state machine — DISCOVER→OFFER, REQUEST→ACK, mismatched requested-IP→NAK, unknown MAC / other message types→drop. Build-tag-free and portable, so it is unit-tested on every platform without a socket."
+[[params.phases]]
+  name = "Linux UDP/67 server"
+  status = "ready"
+  blurb = "`LinuxServer` binds UDP/67 to one kernel interface via `SO_BINDTODEVICE` + `SO_BROADCAST` + `SO_REUSEADDR` and replies by broadcast. The socket path is covered without root through injectable syscall seams, so every error branch runs in CI."
+[[params.phases]]
+  name = "Cross-platform surface"
+  status = "ready"
+  blurb = "A build stub on non-Linux plus a socket-free `StubServer` that drives the `Source` → `Lease` pipeline. Callers compile and test the integration surface on darwin / windows / *bsd; the real bind only ships on Linux."
+[[params.phases]]
+  name = "Optional metrics"
+  status = "ready"
+  blurb = "Pass any `Metrics` implementation in `Options`; a nil sink discards everything. A ready-made Prometheus adapter (`dhcpv4_packets_total{outcome}` + `dhcpv4_handle_duration_seconds`) lives in the `prom` sub-package so the core library keeps no Prometheus dependency."
+[[params.phases]]
+  name = "Coverage & 6 arches"
+  status = "ready"
+  blurb = "100% test coverage including error branches (socket paths via syscall seams, no root), `gofmt` + `go vet` clean, green across all six 64-bit Go arches (amd64, arm64, riscv64, loong64, ppc64le, s390x)."
