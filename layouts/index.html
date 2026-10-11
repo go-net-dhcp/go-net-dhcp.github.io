@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{{/* Dark Reader repaints pages that already draw their own dark theme, as this one does: ask it to stand aside. */}}
+<meta name="darkreader-lock">
 <title>{{ .Site.Title }} — a small, dependency-free DHCPv4 server library in pure Go, no cgo</title>
 <meta name="description" content="go-net-dhcp — a small, dependency-free DHCPv4 server library in pure Go (RFC 2131/2132 wire codec + Linux SO_BINDTODEVICE UDP/67 server), no cgo.">
 <style>
